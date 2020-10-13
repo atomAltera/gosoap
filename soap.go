@@ -30,12 +30,12 @@ type Config struct {
 }
 
 // SoapClient return new *Client to handle the requests with the WSDL
-func SoapClient(wsdl string, httpClient *http.Client) (*Client, error) {
+func SoapClient(wsdl string, httpClient httpClient) (*Client, error) {
 	return SoapClientWithConfig(wsdl, httpClient, &Config{Dump: false})
 }
 
 // SoapClientWithConfig return new *Client to handle the requests with the WSDL
-func SoapClientWithConfig(wsdl string, httpClient *http.Client, config *Config) (*Client, error) {
+func SoapClientWithConfig(wsdl string, httpClient httpClient, config *Config) (*Client, error) {
 	_, err := url.Parse(wsdl)
 	if err != nil {
 		return nil, err
@@ -58,7 +58,7 @@ func SoapClientWithConfig(wsdl string, httpClient *http.Client, config *Config) 
 // Client struct hold all the informations about WSDL,
 // request and response of the server
 type Client struct {
-	HTTPClient   *http.Client
+	HTTPClient   httpClient
 	AutoAction   bool
 	URL          string
 	HeaderName   string
@@ -243,7 +243,7 @@ func (p *process) doRequest(url string) ([]byte, error) {
 	return ioutil.ReadAll(resp.Body)
 }
 
-func (p *process) httpClient() *http.Client {
+func (p *process) httpClient() httpClient {
 	if p.Client.HTTPClient != nil {
 		return p.Client.HTTPClient
 	}
